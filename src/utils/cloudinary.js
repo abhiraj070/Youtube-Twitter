@@ -6,7 +6,7 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY, 
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
-
+// multer ka use karke file ko user se lenge aur apne local server pe upload kar denge. phir cloudinary ko local file ka path deke usse waha pe upload kar denge.
 const uploadOnCloudinary= async (localFilePath)=> {
     try {
         if(!localFilePath) return null;

@@ -9,7 +9,7 @@ import dbconnect from './db/dbconnect.js'
 dbconnect()
 .then(()=>{
   app.listen(process.env.PORT,()=>{
-    console.log("server is started");
+    console.log(`server is started on port: ${process.env.PORT}`);
   })
 })
 .catch((error)=>{
