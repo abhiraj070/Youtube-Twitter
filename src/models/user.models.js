@@ -51,7 +51,7 @@ const userschema= Schema(
 
 userschema.pre("save",async function(next){  //.pre is a middleware offered by mongoose which says " before saving the document run the function ", also we didn't used arrow function here because it does not contain the current context refernce or this cant be used there.
    if(!this.isMoodified("password")) next() 
-    this.password=bcrypt.hash(this.password)  //here bcrypt.hash() is encrypting the pasword
+    this.password=await bcrypt.hash(this.password)  //here bcrypt.hash() is encrypting the pasword
     next()
 })
 
