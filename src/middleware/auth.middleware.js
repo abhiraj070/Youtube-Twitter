@@ -1,0 +1,28 @@
+import { ApiError } from "../utils/ApiErrors";
+import { asyncHandler } from "../utils/asynchandler";
+import { JWT } from 'jsonwebtoken'
+import { User } from "../models/user.models";
+
+export const verifyJWT= asyncHandler(async(req,_)=>{
+    try {
+        const token=req.cookie?.accessToken || req.header("Authorisation")?.replace("Bearer ","")// we can access cookie in req because, this must be the case where cookies are saved in clients side already and are coming with the request.
+    
+        if(!token){
+            throw new ApiError(401,"Unotherised Request")
+        }
+    
+        const decodedToken=JWT.verify(token,process.env.ACCESS_TOKEN_SECRET) //JWT.verift verifies the token, if it matches then it returns the object which was defined when used JWT.sign().
+    
+        const user =await User.findById(decodedToken?._id).select("-password -refreshToken")
+    
+        if(!user){
+            throw new ApiError(401,"Invalid Access Token")
+        }
+    
+        req.user=user //req is an object which stores req.body, req.params, req.header etc, so here we are just adding another key-value in the object
+        next();
+    } catch (error) {
+        throw new ApiError(401, "Invalid access token")
+    }
+})
+// this ia a middleware that injects user in request so that it can be accessed while loging out the user.

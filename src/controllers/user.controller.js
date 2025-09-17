@@ -4,6 +4,22 @@ import { ApiError } from "../utils/ApiErrors.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
+const generateAccessAndRefreshTokens= async (userId)=>{
+    try {
+        const user=await User.findById(userId)
+        const refreshToken= user.generateRefreshToken()
+        const accessToken= user.generateAccessToken()
+
+        user.refreshToken=refreshToken// user is a object of entire document created for the userId. in the document there is a field refreshToken(usershcema), that's why we are able to access it here
+        await user.save({validateBeforeSave: false}) //saving the above changes in the database
+
+        return {refreshToken, accessToken}
+    } catch (error) {
+        throw new ApiError(500,"Somthing went wrong will generation access and refresh tokens")
+    }
+
+}
+
 //take user details from frontend
 //varify details- not empty
 //check if user already exists- by email and username
@@ -14,7 +30,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 //check for user creation
 //return res
 
-const registeruser = asyncHandler( async (req,res)=>{
+const registerUser = asyncHandler( async (req,res)=>{
     //1
     const {email, username, fullName, password}= req.body
     
@@ -35,13 +51,14 @@ const registeruser = asyncHandler( async (req,res)=>{
     } throw new ApiError(400)*/
 
     //3
-    const isalreadyuser=await User.findOne(  //findone is used to fint the first document that matches the condition
+    const isalreadyuser=await User.findOne(  //findone is used to fint the first document that matches the condition and used await beacuse database is in different continent
         {
             $or: [{username},{email}]  //$or is an "or" operator in mongoDB which lets ussearch for documents where atleast one condition is true.
         }  
     )
     //console.log(isalreadyuser); this returns null when no user found
-    
+    //if any of the email and the username is found in the database the variable isalreadyuser will store the entire user document with all its information.
+
     if(isalreadyuser) throw new ApiError(409,"User with same email id or username exists")
 
     //4
@@ -108,7 +125,77 @@ const registeruser = asyncHandler( async (req,res)=>{
     //9
     return res.status(201).json(
         new ApiResponse(200, responseuser, "User registered successfully")
+    )  //res.status is for the HTTP status code and apiresponse if for the application
+})
+
+//take username, email, password id from the frontend
+//username or email based login
+//verify it with the database
+//password check
+//if present, give the access and refresh token through cookies
+//if not throw error
+
+const loginUser = asyncHandler(async (req,res)=>{
+    const {email,username, password}= req.body
+
+    if(!username && !email){
+        throw new ApiError(400,"User or Email id is required")
+    }
+
+    const user = await User.findOne({
+        $or: [{email},{username}]
+    })
+
+    const passwordCheck= await user.isPasswordCorrect(password)
+
+    if(!passwordCheck){
+        throw new ApiError(401,"Password is incorrect")
+    }
+
+    const {refreshToken,accessToken}= await generateAccessAndRefreshTokens(user._id)
+
+    if(!refreshToken||!accessToken){
+        throw new ApiError(500, "Something went wrong while generation refresh and access token ")
+    }
+
+    const loggedInUser= await User.findById(user._id).select("-password -refreshToken")
+
+    const options={// by doing this the cookie we are about to sent in the next step will be secured: cannot be edited from the frontend, can only be edited from the server.
+        httpOnly: true,
+        secure: true
+    }
+
+    return res
+    .status(200)
+    .cookie("accessToken",accessToken,options)
+    .cookie("refreshToken",refreshToken,options)
+    .json(
+        new ApiResponse(
+            200,
+            {
+                user: loggedInUser,accessToken,refreshToken
+            },
+            "User logged in successfully"
+        )
     )
 })
 
-export {registeruser}
+const logoutUser= asyncHandler(async(req,res)=>{
+    await findByIdAndUpdate( //using this we can update something in database quickly and efficiently
+        req.user._id,
+        {
+            $set: { //set/changes values in database
+                refreshToken: undefined
+            },
+        },
+        { //the returned value from here will be updated one.
+            new: true
+        }
+    )
+})
+
+export {
+    registerUser,
+    loginUser,
+    logoutUser
+}

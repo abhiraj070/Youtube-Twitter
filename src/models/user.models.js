@@ -56,11 +56,12 @@ userschema.pre("save",async function(next){  //.pre is a middleware offered by m
 
 userschema.methods.isPasswordCorrect= async function(password){ //it adds a method to the userschema
     return await bcrypt.compare(password,this.password)
-}
+}//schema.method is a object where we can define methods for documents created from that schema
+//here passsword will be compared to this.password which is the encrypted one stored in the database.
 
 userschema.methods.generateAccessToken= function(){
     jwt.sign(  //jwt.sign helps create a token which will in future be used to check whom to give data and whom to not(jiske paas token hoga usko data de denge) 
-        {  //jwt requires som paeameters:
+        {  //jwt requires some parameters:
             _id: this._id,
             email: this.email,
             username: this.username,

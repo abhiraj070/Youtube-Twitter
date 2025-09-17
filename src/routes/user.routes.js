@@ -1,11 +1,12 @@
 import { Router } from 'express'
-import { registeruser } from '../controllers/user.controller.js'
+import { loginUser, registerUser, logoutUser } from '../controllers/user.controller.js'
 import { upload } from '../middleware/multer.middleware.js' 
+import { verifyJWT } from '../middleware/auth.middleware.js'
 
 const router= Router()
 
 router.route("/register").post(
-    upload.fields([     //this upload is a middleware here which just uploads the users file on our local server
+    upload.fields([     //here upload is a middleware here which just uploads the users file on our local server. first the files will be stored in the local server then the method registeruser runs.
         {
             name: "avatar",
             maxCount: 1
@@ -15,7 +16,11 @@ router.route("/register").post(
             maxCount: 1
         }
     ]),
-    registeruser
+    registerUser
 )
+
+router.route("/login").post(loginUser)
+
+router.route("/logout").post(verifyJWT,logoutUser)
 
 export default router
