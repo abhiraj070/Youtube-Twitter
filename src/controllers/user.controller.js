@@ -1,6 +1,8 @@
+//controller is a function where we handle the request just after middlewares complete their jobs. 
+
 import { asyncHandler } from "../utils/asynchandler.js";
 import { User } from "../models/user.models.js";
-import { ApiError } from "../utils/ApiErrors.js"
+import { ApiError } from "../utils/ApiError.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
@@ -10,10 +12,16 @@ const generateAccessAndRefreshTokens= async (userId)=>{
         const refreshToken= user.generateRefreshToken()
         const accessToken= user.generateAccessToken()
 
+        console.log('-> tokens generated (lengths):', {
+            accessTokenLength: accessToken ? accessToken.length : accessToken,
+            refreshTokenLength: refreshToken ? refreshToken.length : refreshToken
+        });
+
+
         user.refreshToken=refreshToken// user is a object of entire document created for the userId. in the document there is a field refreshToken(usershcema), that's why we are able to access it here
         await user.save({validateBeforeSave: false}) //saving the above changes in the database
-
         return {refreshToken, accessToken}
+
     } catch (error) {
         throw new ApiError(500,"Somthing went wrong will generation access and refresh tokens")
     }
@@ -22,7 +30,7 @@ const generateAccessAndRefreshTokens= async (userId)=>{
 
 //take user details from frontend
 //varify details- not empty
-//check if user already exists- by email and username
+//check if user already exists- by email and username.
 //verify avatar- is present or not
 //store avatar and image in cloudinary
 //push the user details in data base
@@ -33,6 +41,7 @@ const generateAccessAndRefreshTokens= async (userId)=>{
 const registerUser = asyncHandler( async (req,res)=>{
     //1
     const {email, username, fullName, password}= req.body
+    console.log("1");
     
     //2
     if(!email){
@@ -69,6 +78,8 @@ const registerUser = asyncHandler( async (req,res)=>{
         coverImagelocalpath=req.files.coverImage[0].path
     }
     
+    
+
     if(!avatarlocalpath) throw new ApiError(400,"Avatar file is required")
     //console.log(req.files);
     //req.files gives
@@ -135,8 +146,22 @@ const registerUser = asyncHandler( async (req,res)=>{
 //if present, give the access and refresh token through cookies
 //if not throw error
 
+const testing = async (req, res) => {
+    console.log("1");
+    const { email, username, password } = req.body;
+    return res.status(202).json(
+        new ApiResponse(200, { email, username, password }, "Testing route works")
+    );
+}
+
+
 const loginUser = asyncHandler(async (req,res)=>{
-    const {email,username, password}= req.body
+    console.log("reaching here");
+    
+    const {email, username, password}= req.body
+
+    console.log("1");
+    
 
     if(!username && !email){
         throw new ApiError(400,"User or Email id is required")
@@ -145,6 +170,10 @@ const loginUser = asyncHandler(async (req,res)=>{
     const user = await User.findOne({
         $or: [{email},{username}]
     })
+
+    if (!user) {
+        throw new ApiError(404, "User does not exist")
+    }
 
     const passwordCheck= await user.isPasswordCorrect(password)
 
@@ -155,7 +184,7 @@ const loginUser = asyncHandler(async (req,res)=>{
     const {refreshToken,accessToken}= await generateAccessAndRefreshTokens(user._id)
 
     if(!refreshToken||!accessToken){
-        throw new ApiError(500, "Something went wrong while generation refresh and access token ")
+         throw new ApiError(500, "Something went wrong while generation refresh and access token ")
     }
 
     const loggedInUser= await User.findById(user._id).select("-password -refreshToken")
@@ -173,9 +202,9 @@ const loginUser = asyncHandler(async (req,res)=>{
         new ApiResponse(
             200,
             {
-                user: loggedInUser,accessToken,refreshToken
+                user: loggedInUser, accessToken, refreshToken
             },
-            "User logged in successfully"
+            "User logged in Successfully"
         )
     )
 })
@@ -197,5 +226,6 @@ const logoutUser= asyncHandler(async(req,res)=>{
 export {
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    testing
 }

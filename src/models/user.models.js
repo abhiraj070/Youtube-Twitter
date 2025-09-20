@@ -1,3 +1,7 @@
+import dotenv from "dotenv";
+dotenv.config();
+console.log("ENV LOADED:", process.env.ACCESS_TOKEN_SECRET);
+
 import mongoose,{Schema} from 'mongoose' //the name inside {} should exactly be same as the one being exported.
 import bcrypt from 'bcrypt'  //we use {} to import when default is not used
 import jwt from 'jsonwebtoken'
@@ -50,7 +54,7 @@ const userschema= Schema(
 
 userschema.pre("save",async function(next){  //.pre is a middleware offered by mongoose which says " before saving the document run the function ", also we didn't used arrow function here because it does not contain the current context refernce or this cant be used there.
    if(!this.isModified("password")) next();
-    this.password= await bcrypt.hash(this.password,10)  //here bcrypt.hash() is encrypting the pasword
+    this.password= bcrypt.hash(this.password,10)  //here bcrypt.hash() is encrypting the pasword
     next()
 })
 
@@ -60,7 +64,7 @@ userschema.methods.isPasswordCorrect= async function(password){ //it adds a meth
 //here passsword will be compared to this.password which is the encrypted one stored in the database.
 
 userschema.methods.generateAccessToken= function(){
-    jwt.sign(  //jwt.sign helps create a token which will in future be used to check whom to give data and whom to not(jiske paas token hoga usko data de denge) 
+    return jwt.sign(  //jwt.sign helps create a token which will in future be used to check whom to give data and whom to not(jiske paas token hoga usko data de denge) 
         {  //jwt requires some parameters:
             _id: this._id,
             email: this.email,
@@ -75,8 +79,8 @@ userschema.methods.generateAccessToken= function(){
 }
 
 userschema.methods.generateRefreshToken= function(){
-    jwt.sign(  
-        {  //jwt requires som paeameters:
+    return jwt.sign(  
+        {  //jwt requires some paeameters:
             _id: this._id
         },
         process.env.REFRESH_TOKEN_SECRET,

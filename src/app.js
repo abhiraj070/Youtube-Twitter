@@ -21,5 +21,4 @@ import userRouter from './routes/user.routes.js'
 //route decleration
 app.use("/api/v1/users",userRouter)
 
-
 export {app} //exports like these are generally used to export multiple things.
