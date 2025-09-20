@@ -6,7 +6,7 @@ const app=express()
 
 app.use(cors({ //cors is used when we need to control that form what places our server can be accessed.
     origin: process.env.CORS_ORIGIN,  //this corsorigin contains the url of the frontend from which our backend can accept request, in our case it will be from anywhere(*).
-    Credential: true
+    credentials: true
 }))
 
 app.use(express.json({limit: "16kb"}))  //this middleware controlls that our server is accepting json files but with a maximum size of 16kb 

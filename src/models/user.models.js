@@ -1,7 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-console.log("ENV LOADED:", process.env.ACCESS_TOKEN_SECRET);
-
 import mongoose,{Schema} from 'mongoose' //the name inside {} should exactly be same as the one being exported.
 import bcrypt from 'bcrypt'  //we use {} to import when default is not used
 import jwt from 'jsonwebtoken'
@@ -63,7 +59,7 @@ userschema.methods.isPasswordCorrect= async function(password){ //it adds a meth
 }//schema.method is a object where we can define methods for documents created from that schema
 //here passsword will be compared to this.password which is the encrypted one stored in the database.
 
-userschema.methods.generateAccessToken= function(){
+userschema.methods.generateAccessToken=async function(){
     return jwt.sign(  //jwt.sign helps create a token which will in future be used to check whom to give data and whom to not(jiske paas token hoga usko data de denge) 
         {  //jwt requires some parameters:
             _id: this._id,

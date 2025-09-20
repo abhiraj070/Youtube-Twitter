@@ -5,21 +5,23 @@ import { User } from "../models/user.models.js";
 import { ApiError } from "../utils/ApiError.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import JWT from 'jsonwebtoken'
 
+const test=()=>{
+    console.log("3");
+}
 const generateAccessAndRefreshTokens= async (userId)=>{
     try {
         const user=await User.findById(userId)
+
         const refreshToken= user.generateRefreshToken()
         const accessToken= user.generateAccessToken()
 
-        console.log('-> tokens generated (lengths):', {
-            accessTokenLength: accessToken ? accessToken.length : accessToken,
-            refreshTokenLength: refreshToken ? refreshToken.length : refreshToken
-        });
-
-
         user.refreshToken=refreshToken// user is a object of entire document created for the userId. in the document there is a field refreshToken(usershcema), that's why we are able to access it here
         await user.save({validateBeforeSave: false}) //saving the above changes in the database
+
+        test()
+        
         return {refreshToken, accessToken}
 
     } catch (error) {
@@ -37,6 +39,8 @@ const generateAccessAndRefreshTokens= async (userId)=>{
 //remove password and refresh token field from response
 //check for user creation
 //return res
+
+
 
 const registerUser = asyncHandler( async (req,res)=>{
     //1
@@ -148,13 +152,10 @@ const registerUser = asyncHandler( async (req,res)=>{
 
 
 const loginUser = asyncHandler(async (req,res)=>{
-    console.log("reaching here");
-    
+    console.log("reached here");
     const {email, username, password}= req.body
-
     console.log("1");
-    
-
+    test()
     if(!username && !email){
         throw new ApiError(400,"User or Email id is required")
     }
@@ -174,6 +175,7 @@ const loginUser = asyncHandler(async (req,res)=>{
     }
 
     const {refreshToken,accessToken}= await generateAccessAndRefreshTokens(user._id)
+   
 
     if(!refreshToken||!accessToken){
          throw new ApiError(500, "Something went wrong while generation refresh and access token ")
@@ -215,9 +217,125 @@ const logoutUser= asyncHandler(async(req,res)=>{
     )
 })
 
+const refreshAccessToken= asyncHandler(async (req,res)=>{
+    const recivedRefreshToken=req.cookies.refreshToken || req.body.refrehToken
+    if(!recivedRefreshToken){
+        throw new ApiError(402,"unauthroised request")
+    }
+    const decodedToken=JWT.verify(recivedRefreshToken,process.env.REFRESH_TOKEN_SECRET) //this helps to verify that the refreshtoken recived is created by the same jwt.sign(patternwaise).recived refresh token can be old or new here
+    
+    const user= await User.findById(decodedToken?._id)
+
+    if(!user){
+        throw new ApiError(402,"Invalid refresh token")
+    }
+
+    if(recivedRefreshToken!==user?.refreshToken){ //this helps here that the refresh token recived is new or not/ same as the one in DB.
+        throw new ApiError(401,"refresh token is expired or used")
+    }
+
+    const options={
+        httpOnly: true,
+        secure: true
+    }
+
+    const {accessToken,refreshToken}=await generateAccessAndRefreshTokens(user._id)
+
+    return res
+    .status(200)
+    .cookie("refrehToken",refreshToken,options)
+    .cookie("accessToken",accessToken,options)
+    .json(
+        new ApiResponse(
+            201,
+            {
+                refrehToken, accessToken
+            },
+            "Access Token Refreshed"
+        )
+    )
+})
+
+const changeCurrentPsaaword= asyncHandler(async (req,res)=>{
+    const {oldPassword, newPassword, confirmPassword}= req.body
+
+    if(!oldPassword || !newPassword || !confirmPassword){
+        throw new ApiError(402,"All the fields are required")
+    }
+
+    if(newPassword!==confirmPassword){
+       throw new ApiError(401,"New password doesn't matches confirm Password")
+    }
+
+    const user= User.findById(req.user?._id)
+    if(!user){
+        throw new ApiError(401,"Unauthorised Request")
+    }
+
+    const isPasswordCorrect=user.isPasswordCorrect(oldPassword)
+
+    if(!isPasswordCorrect){
+        throw new ApiError(401,"Old password is incorrect")
+    }
+
+    user.password=newPassword
+    await user.save({validateBeforeSave: false})
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            201,
+            {},
+            "Password is updated"
+        )
+    )
+})
+
+const getCurrentUser= asyncHandler(async(req,res)=>{
+    return res
+    .status(200)
+    .json(
+        200,
+        req.user,
+        "current user feched Successfully"
+    )
+})
+
+const updateAccountDetails= asyncHandler(async(req,res)=>{
+    const {fullName, email}=req.body
+    if(!fullName && !email){
+       throw new ApiError(401,"Either email or full name is empty")
+    }
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                fullName: fullName,
+                email: email
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-password")
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            201,
+            user,
+            "Account details has been updated"
+        )
+    )
+})
+
 export {
     registerUser,
     loginUser,
     logoutUser,
-    testing
+    refreshAccessToken,
+    changeCurrentPsaaword,
+    getCurrentUser
 }
