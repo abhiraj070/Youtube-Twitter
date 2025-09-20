@@ -146,14 +146,6 @@ const registerUser = asyncHandler( async (req,res)=>{
 //if present, give the access and refresh token through cookies
 //if not throw error
 
-const testing = async (req, res) => {
-    console.log("1");
-    const { email, username, password } = req.body;
-    return res.status(202).json(
-        new ApiResponse(200, { email, username, password }, "Testing route works")
-    );
-}
-
 
 const loginUser = asyncHandler(async (req,res)=>{
     console.log("reaching here");

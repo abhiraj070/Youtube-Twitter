@@ -18,7 +18,6 @@ router.route("/register").post(
     registerUser
 )
 
-router.route("/test").post(testing)
 
 router.route("/login").post(loginUser)
 
