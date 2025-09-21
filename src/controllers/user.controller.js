@@ -207,8 +207,8 @@ const logoutUser= asyncHandler(async(req,res)=>{
     await findByIdAndUpdate( //using this we can update something in database quickly and efficiently
         req.user._id,
         {
-            $set: { //set/changes values in database
-                refreshToken: undefined
+            $unset: { //removes values in database
+                refreshToken: 1  //here refreshToken field will be removed from the DB
             },
         },
         { //the returned value from here will be updated one.
