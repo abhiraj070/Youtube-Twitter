@@ -267,7 +267,7 @@ const changeCurrentPsaaword= asyncHandler(async (req,res)=>{
        throw new ApiError(401,"New password doesn't matches confirm Password")
     }
 
-    const user= User.findById(req.user?._id)
+    const user= await User.findById(req.user?._id)
     if(!user){
         throw new ApiError(401,"Unauthorised Request")
     }
@@ -296,10 +296,10 @@ const getCurrentUser= asyncHandler(async(req,res)=>{
     return res
     .status(200)
     .json(
-        200,
+        new ApiResponse(200,
         req.user,
         "current user feched Successfully"
-    )
+    ))
 })
 
 const updateAccountDetails= asyncHandler(async(req,res)=>{
@@ -331,11 +331,80 @@ const updateAccountDetails= asyncHandler(async(req,res)=>{
     )
 })
 
+const updateUserAvatar= asyncHandler(async(req,res)=>{
+    const avatarlocalpath= req.files?.avatar[0]?.path
+
+    if(!avatarlocalpath){
+        throw new ApiError(401,"Avatar is missing")
+    }
+
+    const avatar=await uploadOnCloudinary(avatarlocalpath)
+
+    if(!avatar.url){
+        throw new ApiError(501,"Error while uploading avatar")
+    }
+
+    const user= await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                avatar: avatar.url
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-password")
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, user, "Avatar image updated successfully")
+    )
+})
+
+const updateUserCoverInage= asyncHandler(async(req,res)=>{
+    const coverImagelocalpath= req.files?.coverImage[0]?.path
+
+    if(!coverImagelocalpath){
+        throw new ApiError(401,"Avatar is missing")
+    }
+
+    const avatar=await uploadOnCloudinary(coverImagelocalpath)
+
+    if(!avatar.url){
+        throw new ApiError(501,"Error while uploading Cover Image")
+    }
+
+    const user= await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                coverImage: coverImage.url
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-password")
+
+    return res
+    .status(200)
+    .json(
+        201,
+        user,
+        "Cover Image is Updated"
+    )
+})
+
 export {
     registerUser,
     loginUser,
     logoutUser,
     refreshAccessToken,
     changeCurrentPsaaword,
-    getCurrentUser
+    getCurrentUser,
+    updateAccountDetails,
+    updateUserAvatar,
+    updateUserCoverInage
 }
