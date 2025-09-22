@@ -9,7 +9,7 @@ const commentSchema= Schema({
         type: String,
         required:true
     },
-    video: {
+    video: {  //while creating a document in database videoId will be given
         type: Schema.Types.ObjectId,
         ref: "Video"
     },
