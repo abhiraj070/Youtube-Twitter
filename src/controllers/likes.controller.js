@@ -1,6 +1,6 @@
-import { asyncHandler } from "../utils/asynchandler";
-import { Likes } from "../models/likes.models"
-import { ApiResponse } from "../utils/ApiResponse";
+import { asyncHandler } from "../utils/asynchandler.js";
+import { Likes } from "../models/likes.models.js"
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const toggleVideoLike= asyncHandler(async(req,res)=>{
     const user_id= req.user._id

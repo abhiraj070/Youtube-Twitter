@@ -1,12 +1,11 @@
 import mongoose,{Schema} from "mongoose";
-import { Video } from "./video.models";
 
 const likesSchema= Schema({
     likedBy: {
         type: Schema.Types.ObjectId,
         ref: "User"
     },
-    Video: {
+    video: {
         type: Schema.Types.ObjectId,
         ref: "Video"
     },
