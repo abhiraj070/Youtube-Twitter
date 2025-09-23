@@ -11,3 +11,5 @@ router.route("/:videoId/comment").get(getAllComments)
 router.route("/:commentId/comment").post(updateComment)
 
 router.route("/:commentId/comment").delete(deleteComment)
+
+export default router
