@@ -30,12 +30,10 @@ const videoschema= Schema(
         views:{
             type: Number,
             default:0,
-            required: true
         },
         isPublished:{
             type: Boolean,
-            required: true,
-            default: false
+            default: true
         }
     },{timestamps: true}
 )

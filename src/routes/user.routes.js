@@ -6,7 +6,7 @@ import { verifyJWT } from '../middleware/auth.middleware.js'
 const router= Router()
 router.route("/register").post(
     upload.fields([     //here upload is a middleware here which just uploads the users file on our local server. first the files will be stored in the local server then the method registeruser runs.
-        {
+        {       //avatar and coverImage naam ka, field me ek member banana hai.
             name: "avatar",
             maxCount: 1
         },
