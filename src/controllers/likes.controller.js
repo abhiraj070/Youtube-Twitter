@@ -11,6 +11,7 @@ const toggleVideoLike= asyncHandler(async(req,res)=>{
         result= Likes.create({
             likedBy: user_id,
             video: video_id,
+            views: views+1
         })
     }
     else{

@@ -1,12 +1,13 @@
 import { Router } from "express"
-import {publishAVideo, getVideoById, updateVideoDetails} from "../controllers/videos.controller"
+import {publishAVideo, getVideoById, updateVideoDetails, deleteVideo, togglePublish} from "../controllers/videos.controller"
 import { verifyJWT } from "../middleware/auth.middleware"
 import { upload } from "../middleware/multer.middleware"
 
 const router=Router()
 
+router.use(verifyJWT)
+
 router.route("/publish-video").post(
-        verifyJWT,
         upload.fields([
             {
                 name: videoFile,
@@ -20,7 +21,11 @@ router.route("/publish-video").post(
         publishAVideo
     )
 
-router.route("/:videoId/video").get(verifyJWT, getVideoById)
+router.route("/video/:videoId").get(getVideoById)
 
-router.route("/:videoId/video").patch(verifyJWT, updateVideoDetails)
+router.route("/video/:videoId").patch(updateVideoDetails)
+
+router.route("/video/:videoId").delete(deleteVideo)
+
+router.route("/publish/:videoId").patch(togglePublish)
 

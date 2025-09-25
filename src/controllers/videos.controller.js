@@ -88,6 +88,60 @@ const updateVideoDetails= asyncHandler(async(req,res)=>{
         .json(new ApiResponse(200,updateDetails,"Details Updated Successfully"))
 })
 
-//const grtAllVideos
+//const getAllVideos
 
-export {publishAVideo, getVideoById, updateVideoDetails}
+const deleteVideo= asyncHandler(async(req,res)=>{
+    const user_id= req.user._id
+    const video_id= req.params.VideoId
+    const isOwner=await Video.findOne({owner: user_id, _id: video_id})
+    let deletedVideo;
+    if(isOwner){
+        deletedVideo=await Video.findByIdAndDelete(video_id)
+        if(!deletedVideo){
+            throw new ApiError(400,"The user is not found")
+        }
+        return res
+        .status(200)
+        .json(new ApiResponse(200,deletedVideo,"The video is Successfully deleted"))
+    }
+    return res
+        .status(400)
+        .json(new ApiResponse(400,{},"The video is cannot be deleted"))
+})
+
+const togglePublish= asyncHandler(async(req,res)=>{
+    const video_id= req.params.VideoId
+    const video= await Video.findById(video_id)
+    if(!video){
+        throw new ApiError(400,"Video not Found")
+    }
+    const isTrue= video.isPublished
+    let isUpdated
+    if(isTrue){
+        isUpdated= await Video.findByIdAndUpdate(
+            video_id,
+            {
+                isPublished:false
+            },
+            {
+                new: true
+            }
+        )    
+    }
+    else{
+        isUpdated= await Video.findByIdAndUpdate(
+            video_id,
+            {
+                isPublished: true
+            },
+            {
+                new: true
+            }
+        )
+    }
+    return res
+    .status(200)
+    .json(new ApiResponse(200,isUpdated,"Publish button is toggled"))
+})
+
+export {publishAVideo, getVideoById, updateVideoDetails, deleteVideo, togglePublish}
