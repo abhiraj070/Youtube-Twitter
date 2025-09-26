@@ -29,3 +29,4 @@ router.route("/video/:videoId").delete(deleteVideo)
 
 router.route("/publish/:videoId").patch(togglePublish)
 
+export default router
