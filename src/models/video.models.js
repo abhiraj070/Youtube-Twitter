@@ -34,6 +34,14 @@ const videoschema= Schema(
         isPublished:{
             type: Boolean,
             default: true
+        },
+        totalLikes:{
+            type:Number,
+            default:0
+        },
+        totalViews:{
+            type: Number,
+            default:0
         }
     },{timestamps: true}
 )
