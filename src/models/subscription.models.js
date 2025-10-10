@@ -1,6 +1,6 @@
-import mongoose, {Schema, schema} from 'mongoose'
+import mongoose, {Schema} from 'mongoose'
 
-const subscriptionSchema= schema({
+const subscriptionSchema= Schema({
     subscriber: {  //user which is subscribing 
         type: Schema.Types.ObjectId,
         ref: "User"

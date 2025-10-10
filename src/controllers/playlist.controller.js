@@ -1,7 +1,7 @@
-import { asyncHandler } from "../utils/asynchandler";
-import { ApiError } from "../utils/ApiError"
-import { ApiResponse } from "../utils/ApiResponse"
-import { Playlist } from "../models/playlist.models";
+import { asyncHandler } from "../utils/asynchandler.js";
+import { ApiError } from "../utils/ApiError.js"
+import { ApiResponse } from "../utils/ApiResponse.js"
+import { Playlist } from "../models/playlist.models.js";
 
 const createPlaylist= asyncHandler(async (req,res) => {
     const user_id= req.user._id

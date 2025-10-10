@@ -1,7 +1,7 @@
 import { Router } from "express"
-import {publishAVideo, getVideoById, updateVideoDetails, deleteVideo, togglePublish} from "../controllers/videos.controller"
-import { verifyJWT } from "../middleware/auth.middleware"
-import { upload } from "../middleware/multer.middleware"
+import {publishAVideo, getVideoById, updateVideoDetails, deleteVideo, togglePublish} from "../controllers/videos.controller.js"
+import { verifyJWT } from "../middleware/auth.middleware.js"
+import { upload } from "../middleware/multer.middleware.js"
 
 const router=Router()
 
@@ -10,11 +10,11 @@ router.use(verifyJWT)
 router.route("/publish-video").post(
         upload.fields([
             {
-                name: videoFile,
+                name: "videoFile",
                 maxCount: 1 
             },
             {
-                name: thumbnail,
+                name: "thumbnail",
                 maxCount: 1
             }
         ]),

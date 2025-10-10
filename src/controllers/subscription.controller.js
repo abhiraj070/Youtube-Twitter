@@ -1,6 +1,6 @@
-import { Subscription } from "../models/subscription.models";
-import { ApiResponse } from "../utils/ApiResponse";
-import { asyncHandler } from "../utils/asynchandler";
+import { Subscription } from "../models/subscription.models.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { asyncHandler } from "../utils/asynchandler.js";
 
 const toggleSubscription= asyncHandler(async (req,res) => {
     const { channelId }= req.params

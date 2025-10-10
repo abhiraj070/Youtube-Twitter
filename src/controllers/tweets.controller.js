@@ -1,7 +1,7 @@
-import { Tweet } from "../models/tweets.models";
-import { ApiError } from "../utils/ApiError";
-import { ApiResponse } from "../utils/ApiResponse";
-import { asyncHandler } from "../utils/asynchandler";
+import { Tweet } from "../models/tweets.models.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { asyncHandler } from "../utils/asynchandler.js";
 
 const createTweet= asyncHandler(async(req,res)=>{
     const {content}= req.body
@@ -63,4 +63,4 @@ const deleteTweets= asyncHandler(async(req,res)=>{
     .json(new ApiResponse(200,deletedTweet,"Tweet deleted Successfully"))
 })
 
-return { createTweet, getUserTweets, updateTweets, deleteTweets}
+export { createTweet, getUserTweets, updateTweets, deleteTweets}

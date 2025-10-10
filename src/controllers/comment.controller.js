@@ -1,6 +1,6 @@
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asynchandler.js";
-import { Comment } from "../models/comment.models.js";
+import { Comment } from "../models/comments.models.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const getAllComments= asyncHandler(async (req,res)=>{
