@@ -1,5 +1,8 @@
 import { Router } from 'express'
-import { loginUser, registerUser, logoutUser, refreshAccessToken, changeCurrentPsaaword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage } from '../controllers/user.controller.js'
+import { loginUser, registerUser, logoutUser, 
+    refreshAccessToken, changeCurrentPsaaword, 
+    getCurrentUser, updateAccountDetails, 
+    updateUserAvatar, updateUserCoverImage, getUserProfileData } from '../controllers/user.controller.js'
 import { upload } from '../middleware/multer.middleware.js' 
 import { verifyJWT } from '../middleware/auth.middleware.js'
 
@@ -34,7 +37,7 @@ router.route("/avatar").patch(upload.single("Avatar"),verifyJWT,updateUserAvatar
 
 router.route("/coverImage").patch(upload.single("coverImage"),verifyJWT,updateUserCoverImage)
 
-
+router.route("/Profile/:username").get(verifyJWT,getUserProfileData)
 
 
 

@@ -22,7 +22,7 @@ import likeRouter from "./routes/likes.routes.js"
 import playlistRouter from "./routes/playlist.routes.js"
 import tweetRouter from "./routes/tweets.routes.js"
 import videoRouter from "./routes/video.routes.js"
-
+import SubscriptionRouter from "./routes/subscription.routes.js" 
 
 
 //route decleration
@@ -32,7 +32,7 @@ app.use("api/v1/likes",likeRouter)
 app.use("/api/v1/playlist",playlistRouter)
 app.use("/api/v1/tweet",tweetRouter)
 app.use("api/v1/video",videoRouter)
-
+app.use("/api/v1/subscription",SubscriptionRouter)
 
 
 export {app} //exports like these are generally used to export multiple things.

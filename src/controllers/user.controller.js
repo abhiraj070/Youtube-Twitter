@@ -398,15 +398,6 @@ const updateUserCoverImage= asyncHandler(async(req,res)=>{
 })
 
 import { Subscription } from "../models/subscription.models.js";
-const getUserProfileData1=asyncHandler(async (req,res) => {
-    const {username}= req.params
-    if(!username){
-        throw new ApiError(400,"Username is missing")
-    }
-    const subscribers= await Subscription.find({channel: username })
-    const numberOfSubscribers= subscribers.length
-    
-})
 
 const getUserProfileData= asyncHandler(async (req,res) => {
     const {username}= req.params
