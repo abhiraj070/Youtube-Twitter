@@ -397,6 +397,80 @@ const updateUserCoverImage= asyncHandler(async(req,res)=>{
     )
 })
 
+import { Subscription } from "../models/subscription.models.js";
+const getUserProfileData1=asyncHandler(async (req,res) => {
+    const {username}= req.params
+    if(!username){
+        throw new ApiError(400,"Username is missing")
+    }
+    const subscribers= await Subscription.find({channel: username })
+    const numberOfSubscribers= subscribers.length
+    
+})
+
+const getUserProfileData= asyncHandler(async (req,res) => {
+    const {username}= req.params
+    if(!username){
+        throw new ApiError(400,"Username is missing")
+    }
+    const channel=await User.aggregate([
+        {
+            $match: {  //User me jake username.toLowerCase naam ke document ko username me daal dega. 
+                username: username.toLowerCase
+            }
+        },
+        {
+            $lookup: {  //if the _id id matched with the channel id the whole document from the subscriptions modle will be inserted int eh subscribers array
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "channel",
+                as: "subscribers"
+            }
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "subscriber",
+                as: "subscribedTo"
+            }
+        },
+        {
+            $addFields: {
+                subscribersCount: {
+                    $size: "subscribers"
+                },
+                subscribedToCount:{
+                    $size: "subscribedTo"
+                },
+                isSubscribed:{
+                    $cond: {
+                        if: {$in:[req.user._id,"subscribers.subscriber"]},
+                        then: true,
+                        else: false
+
+                    }
+                }
+            }
+        },
+        {
+            $project:{ //this stage helps us select which feild to include and which to exlude
+                fullName: 1,
+                username:1,
+                avatar:1,
+                coverImage:1,
+                email:1,
+                subscribedToCount:1,
+                subscribersCount:1,
+                isSubscribed:1
+            }
+        }
+    ])
+    return res
+    .status(200)
+    .json(new ApiResponse(200, channel[0], "Profile data fetched successfully"))
+})
+
 export {
     registerUser,
     loginUser,
@@ -406,5 +480,6 @@ export {
     getCurrentUser,
     updateAccountDetails,
     updateUserAvatar,
-    updateUserCoverImage
+    updateUserCoverImage,
+    getUserProfileData
 }
