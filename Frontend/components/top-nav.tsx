@@ -30,7 +30,7 @@ export function TopNav() {
   return (
     <header className="sticky top-0 z-30 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4">
-        <Link href="/dashboard" className="font-semibold cursor-pointer">
+        <Link href="/" className="font-semibold cursor-pointer">
           <span className="rounded-md bg-primary px-2 py-1 text-primary-foreground">V</span>
           <span className="ml-2">Social</span>
         </Link>
@@ -77,12 +77,13 @@ export function TopNav() {
               </div>
               <DropdownMenuSeparator />
               <div className="p-2">
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem asChild className="cursor-pointer">
                   <a href="/profile" className="w-full">
                     View Profile
                   </a>
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  className="cursor-pointer"
                   onSelect={(e) => {
                     e.preventDefault()
                     // Optional: Add logic to clear auth later

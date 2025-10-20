@@ -6,7 +6,7 @@ import { Home, Heart, History, Video, Users, Settings } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const items = [
-  { href: "/profile", label: "Home", icon: Home },
+  { href: "/", label: "Home", icon: Home },
   { href: "/liked", label: "Liked", icon: Heart },
   { href: "/history", label: "History", icon: History },
   { href: "/my-content", label: "Content", icon: Video },
@@ -21,14 +21,14 @@ export function BottomNav() {
       <ul className="mx-auto grid max-w-lg grid-cols-6">
         {items.map((item) => {
           const Icon = item.icon
-          const active = pathname.startsWith(item.href)
+          const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)
           return (
             <li key={item.href}>
               <Link
                 href={item.href}
                 className={cn(
-                  "flex h-12 flex-col items-center justify-center text-xs",
-                  active ? "text-primary" : "text-muted-foreground",
+                  "flex h-12 flex-col items-center justify-center text-xs cursor-pointer transition-colors",
+                  active ? "text-primary" : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 <Icon className="h-5 w-5" />

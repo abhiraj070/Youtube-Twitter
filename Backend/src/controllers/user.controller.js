@@ -231,7 +231,7 @@ const refreshAccessToken= asyncHandler(async (req,res)=>{
     }
 
     if(recivedRefreshToken!==user?.refreshToken){ //this helps here that the refresh token recived is new or not/ same as the one in DB.
-        throw new ApiError(401,"refresh token is expired or used")
+        throw new ApiError(401,"refresh token is expired")
     }
 
     const options={

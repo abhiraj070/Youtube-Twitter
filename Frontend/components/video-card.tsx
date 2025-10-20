@@ -1,4 +1,3 @@
-"use client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Heart } from "lucide-react"
 import Image from "next/image"
@@ -31,7 +30,7 @@ function formatDate(iso: string) {
 
 export function VideoCard({ video }: { video: Video }) {
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow">
       <div className="relative aspect-video">
         {/* Using next/image for good perf. Placeholder URL with hard-coded query */}
         <Image

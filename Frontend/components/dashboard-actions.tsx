@@ -33,6 +33,7 @@ export function DashboardActions({ onQuickUpload }: Props) {
         <DropdownMenuLabel>Dashboard</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
+          className="cursor-pointer"
           onClick={() => {
             router.push("/dashboard")
             setOpen(false)
@@ -42,6 +43,7 @@ export function DashboardActions({ onQuickUpload }: Props) {
           Open Dashboard
         </DropdownMenuItem>
         <DropdownMenuItem
+          className="cursor-pointer"
           onClick={() => {
             router.push("/dashboard#analytics")
             setOpen(false)
@@ -51,6 +53,7 @@ export function DashboardActions({ onQuickUpload }: Props) {
           Analytics
         </DropdownMenuItem>
         <DropdownMenuItem
+          className="cursor-pointer"
           onClick={() => {
             router.push("/dashboard#videos")
             setOpen(false)
@@ -61,6 +64,7 @@ export function DashboardActions({ onQuickUpload }: Props) {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
+          className="cursor-pointer"
           onClick={() => {
             onQuickUpload?.()
             setOpen(false)

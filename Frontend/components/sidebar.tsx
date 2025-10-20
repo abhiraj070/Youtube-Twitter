@@ -6,7 +6,7 @@ import { Home, Heart, History, Video, Users, Settings } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const items = [
-  { href: "/dashboard", label: "Home", icon: Home },
+  { href: "/", label: "Home", icon: Home },
   { href: "/liked", label: "Liked Videos", icon: Heart },
   { href: "/history", label: "History", icon: History },
   { href: "/my-content", label: "My Content", icon: Video },
@@ -21,7 +21,7 @@ export function Sidebar() {
       <nav className="flex h-full flex-col gap-1 p-3">
         {items.map((item) => {
           const Icon = item.icon
-          const active = pathname === item.href || pathname.startsWith(item.href)
+          const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)
           return (
             <Link
               key={item.href}

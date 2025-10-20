@@ -1,4 +1,3 @@
-"use client"
 import type React from "react"
 import { TopNav } from "./top-nav"
 import { Sidebar } from "./sidebar"
