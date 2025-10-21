@@ -3,23 +3,13 @@ import { Heart } from "lucide-react"
 import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-type Video = {
-  id: string
-  title: string
-  creator: string
-  thumbnail: string
-  avatar: string
-  views: number
-  uploadDate: string
-}
-
-function formatViews(n: number) {
+function formatViews(n) {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
   if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`
   return `${n}`
 }
 
-function formatDate(iso: string) {
+function formatDate(iso) {
   const d = new Date(iso)
   return d.toLocaleDateString(undefined, {
     year: "numeric",
@@ -28,11 +18,10 @@ function formatDate(iso: string) {
   })
 }
 
-export function VideoCard({ video }: { video: Video }) {
+export function VideoCard({ video }) {
   return (
     <Card className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow">
       <div className="relative aspect-video">
-        {/* Using next/image for good perf. Placeholder URL with hard-coded query */}
         <Image
           src={video.thumbnail || `/placeholder.svg?height=360&width=640&query=video%20thumbnail`}
           alt={`${video.title} thumbnail`}

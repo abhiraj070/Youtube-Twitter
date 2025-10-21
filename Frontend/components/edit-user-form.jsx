@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useEffect, useMemo, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -11,20 +9,11 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useToast } from "@/hooks/use-toast"
 
-type UserDetails = {
-  name: string
-  username: string
-  bio: string
-  email: string
-  website: string
-  avatarUrl?: string
-}
-
 const LS_KEY = "v0:user-details"
 
 export function EditUserForm() {
   const { toast } = useToast()
-  const [details, setDetails] = useState<UserDetails>({
+  const [details, setDetails] = useState({
     name: "Your Name",
     username: "you",
     bio: "Short bio goes here. Tell the world who you are.",
@@ -32,20 +21,18 @@ export function EditUserForm() {
     website: "https://example.com",
     avatarUrl: "/stylized-user-avatar.png",
   })
-  const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const [avatarFile, setAvatarFile] = useState(null)
 
-  // Derived preview URL for avatar
   const previewUrl = useMemo(() => {
     if (avatarFile) return URL.createObjectURL(avatarFile)
     return details.avatarUrl || "/placeholder-user.jpg"
   }, [avatarFile, details.avatarUrl])
 
-  // Load from localStorage
   useEffect(() => {
     try {
       const raw = localStorage.getItem(LS_KEY)
       if (raw) {
-        const parsed = JSON.parse(raw) as UserDetails
+        const parsed = JSON.parse(raw)
         setDetails((prev) => ({ ...prev, ...parsed }))
       }
     } catch {
@@ -53,18 +40,17 @@ export function EditUserForm() {
     }
   }, [])
 
-  // Cleanup object URL
   useEffect(() => {
     return () => {
       if (avatarFile) URL.revokeObjectURL(previewUrl)
     }
   }, [avatarFile, previewUrl])
 
-  function handleChange<K extends keyof UserDetails>(key: K, value: UserDetails[K]) {
+  function handleChange(key, value) {
     setDetails((d) => ({ ...d, [key]: value }))
   }
 
-  function onAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function onAvatarChange(e) {
     const file = e.target.files?.[0]
     if (file) {
       setAvatarFile(file)
@@ -84,11 +70,10 @@ export function EditUserForm() {
     toast({ title: "Reset", description: "Restored default user details." })
   }
 
-  function onSave(e: React.FormEvent) {
+  function onSave(e) {
     e.preventDefault()
 
-    // In a real app, upload avatarFile then store URL. Here we store preview or existing URL.
-    const toStore: UserDetails = {
+    const toStore = {
       ...details,
       avatarUrl: avatarFile ? previewUrl : details.avatarUrl,
     }
@@ -98,7 +83,7 @@ export function EditUserForm() {
       setDetails(toStore)
       toast({ title: "Saved", description: "Your profile details were updated." })
     } catch {
-      toast({ title: "Error", description: "Unable to save details. Please try again.", variant: "destructive" as any })
+      toast({ title: "Error", description: "Unable to save details. Please try again.", variant: "destructive" })
     }
   }
 
@@ -148,7 +133,6 @@ export function EditUserForm() {
                 id="username"
                 value={details.username}
                 onChange={(e) => handleChange("username", e.target.value.replace(/\s+/g, ""))}
-                prefix="@"
                 placeholder="you"
                 aria-describedby="username-help"
               />

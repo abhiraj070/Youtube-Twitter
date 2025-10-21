@@ -5,10 +5,9 @@ import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 
 export function ThemeToggle() {
-  const [isDark, setIsDark] = useState<boolean>(false)
+  const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
-    // initialize from current DOM
     setIsDark(document.documentElement.classList.contains("dark"))
   }, [])
 

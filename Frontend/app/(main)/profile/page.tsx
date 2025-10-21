@@ -7,15 +7,22 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useToast } from "@/hooks/use-toast"
 import { VideoCard } from "@/components/video-card"
-import { mockVideos, mockPlaylists, mockTweets, mockFollowing } from "@/lib/mock"
+import { mockVideos, mockPlaylists, mockFollowing } from "@/lib/mock"
 import { cn } from "@/lib/utils"
 import { EditProfileDialog } from "@/components/edit-profile-dialog"
+import axios from 'axios'
 
 type TabKey = "videos" | "playlists" | "tweets" | "following"
 
+interface Tweet {
+  id: string;
+  text: string;
+  user: string;
+}
+
 export default function ProfilePage() {
   const [tab, setTab] = useState<TabKey>("videos")
-  const [tweets, setTweets] = useState(mockTweets)
+  const [tweets, setTweets] = useState<any[]>([])
   const [tweetText, setTweetText] = useState("")
   const { toast } = useToast()
   const [openEdit, setOpenEdit] = useState(false)
@@ -24,16 +31,22 @@ export default function ProfilePage() {
     toast({ title: "Followed", description: "You are now following @you" })
   }
 
-  function postTweet() {
+  async function postTweet() {
     if (!tweetText.trim()) return
-    const newTweet = {
-      id: Math.random().toString(36).slice(2),
-      content: tweetText.trim(),
-      createdAt: new Date().toISOString(),
+    try {
+      const res= await axios.post(
+        "/api/v1/create-tweet",
+        { content: tweetText.trim() }, // req.body.content is accesses in backend
+        { withCredentials: true } //this allows the cookies to go with the response
+      );
+      toast({title: "Tweet Posted"}) //after the tweet is posted a pop will aper with the message in title.
+
+      setTweets([res.data.Tweets,...tweets])// here tweets array get updated. (...tweets) creats a new array and puts the new tweet in the front. the creation of the new array will trigger rerender
+      setTweetText("")
+    } catch (error) {
+      console.log(error);
+      toast({title: "Error"});
     }
-    setTweets([newTweet, ...tweets])
-    setTweetText("")
-    toast({ title: "Tweet posted" })
   }
 
   function deleteTweet(id: string) {

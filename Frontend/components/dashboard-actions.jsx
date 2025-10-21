@@ -13,11 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { BarChart3, ListVideo, PlusCircle, PanelRight } from "lucide-react"
 
-type Props = {
-  onQuickUpload?: () => void
-}
-
-export function DashboardActions({ onQuickUpload }: Props) {
+export function DashboardActions({ onQuickUpload }) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
 
@@ -77,5 +73,3 @@ export function DashboardActions({ onQuickUpload }: Props) {
     </DropdownMenu>
   )
 }
-
-export default DashboardActions

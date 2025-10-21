@@ -9,19 +9,14 @@ import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { useVideos } from "@/lib/use-videos"
 
-type Props = {
-  open: boolean
-  onOpenChange: (v: boolean) => void
-}
-
-export function UploadVideoDialog({ open, onOpenChange }: Props) {
+export function UploadVideoDialog({ open, onOpenChange }) {
   const { addVideo } = useVideos()
   const { toast } = useToast()
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [thumb, setThumb] = useState<string>("")
+  const [thumb, setThumb] = useState("")
   const [progress, setProgress] = useState(0)
-  const fileRef = useRef<HTMLInputElement>(null)
+  const fileRef = useRef(null)
 
   function reset() {
     setTitle("")
@@ -31,7 +26,7 @@ export function UploadVideoDialog({ open, onOpenChange }: Props) {
     if (fileRef.current) fileRef.current.value = ""
   }
 
-  function handleFile(file?: File | null) {
+  function handleFile(file) {
     if (!file) return
     const reader = new FileReader()
     reader.onload = () => setThumb(String(reader.result))

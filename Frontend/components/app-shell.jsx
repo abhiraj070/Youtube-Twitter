@@ -1,9 +1,8 @@
-import type React from "react"
 import { TopNav } from "./top-nav"
 import { Sidebar } from "./sidebar"
 import { BottomNav } from "./bottom-nav"
 
-export default function AppShell({ children }: { children: React.ReactNode }) {
+export default function AppShell({ children }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <TopNav />

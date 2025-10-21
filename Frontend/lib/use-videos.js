@@ -2,23 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react"
 
-export type Video = {
-  id: string
-  title: string
-  description: string
-  thumbnail: string
-  channelName: string
-  channelAvatar: string
-  views: number
-  duration: string
-  published: boolean
-  createdAt: string // ISO string
-  playlistId?: string
-}
-
 const STORAGE_KEY = "v0.videos"
 
-const seed: Video[] = [
+const seed = [
   {
     id: "v1",
     title: "Intro to the Platform",
@@ -57,24 +43,24 @@ const seed: Video[] = [
   },
 ]
 
-function read(): Video[] {
+function read() {
   if (typeof window === "undefined") return seed
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? (JSON.parse(raw) as Video[]) : seed
+    return raw ? JSON.parse(raw) : seed
   } catch {
     return seed
   }
 }
 
-function write(videos: Video[]) {
+function write(videos) {
   if (typeof window === "undefined") return
   localStorage.setItem(STORAGE_KEY, JSON.stringify(videos))
   window.dispatchEvent(new CustomEvent("videos:changed"))
 }
 
 export function useVideos() {
-  const [videos, setVideos] = useState<Video[]>(() => read())
+  const [videos, setVideos] = useState(() => read())
 
   useEffect(() => {
     const handler = () => setVideos(read())
@@ -88,13 +74,13 @@ export function useVideos() {
 
   const stats = useMemo(() => {
     const totalViews = videos.reduce((acc, v) => acc + v.views, 0)
-    const totalLikes = Math.round(totalViews * 0.08) // mock ratio
-    const subscribers = 4200 // mock
+    const totalLikes = Math.round(totalViews * 0.08)
+    const subscribers = 4200
     return { totalViews, totalLikes, subscribers }
   }, [videos])
 
-  function addVideo(input: Omit<Video, "id" | "createdAt" | "views" | "published" | "channelName" | "channelAvatar">) {
-    const next: Video = {
+  function addVideo(input) {
+    const next = {
       id: `v_${crypto.randomUUID()}`,
       createdAt: new Date().toISOString(),
       views: 0,
@@ -107,17 +93,17 @@ export function useVideos() {
     write(newList)
   }
 
-  function updateVideo(id: string, patch: Partial<Video>) {
+  function updateVideo(id, patch) {
     const list = read().map((v) => (v.id === id ? { ...v, ...patch } : v))
     write(list)
   }
 
-  function deleteVideo(id: string) {
+  function deleteVideo(id) {
     const list = read().filter((v) => v.id !== id)
     write(list)
   }
 
-  function togglePublished(id: string) {
+  function togglePublished(id) {
     const list = read().map((v) => (v.id === id ? { ...v, published: !v.published } : v))
     write(list)
   }

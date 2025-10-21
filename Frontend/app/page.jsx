@@ -4,7 +4,7 @@ import AppShell from "@/components/app-shell"
 import { VideoCard } from "@/components/video-card"
 import { mockVideos } from "@/lib/mock"
 import { useState } from "react"
-import DashboardActions from "@/components/dashboard-actions"
+import { DashboardActions } from "@/components/dashboard-actions"
 import { UploadVideoDialog } from "@/components/upload-video-dialog"
 
 export default function Page() {

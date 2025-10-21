@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import Link from "next/link"
 import { useState } from "react"
 import { Search } from "lucide-react"
@@ -22,7 +20,7 @@ export function TopNav() {
   const [query, setQuery] = useState("")
   const { toast } = useToast()
 
-  function onSearch(e: React.FormEvent) {
+  function onSearch(e) {
     e.preventDefault()
     toast({ title: "Search", description: `You searched for "${query}"` })
   }
@@ -86,8 +84,6 @@ export function TopNav() {
                   className="cursor-pointer"
                   onSelect={(e) => {
                     e.preventDefault()
-                    // Optional: Add logic to clear auth later
-                    // toast({ title: "Logged out" })
                     window.location.href = "/login"
                   }}
                 >
