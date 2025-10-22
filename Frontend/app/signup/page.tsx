@@ -130,7 +130,7 @@ export default function SignupPage() {
               {errors.username && <p className="mt-1 text-xs text-destructive">{errors.username}</p>}
             </div>
             <div>
-              <label htmlFor="avatar" className="mb-1 block text-sm">
+              <label htmlFor="avatar" className="mb-1 block text-sm cursor-pointer">
                 Avatar (required)
               </label>
               <input
@@ -138,12 +138,12 @@ export default function SignupPage() {
                 type="file"
                 accept="image/*"
                 onChange={(e) => setAvatarFile(e.target.files ? e.target.files[0] : null)}
-                className="block w-full"
+                className="block w-full cursor-pointer"
               />
               {errors.avatar && <p className="mt-1 text-xs text-destructive">{errors.avatar}</p>}
             </div>
             <div>
-              <label htmlFor="coverImage" className="mb-1 block text-sm">
+              <label htmlFor="coverImage" className="mb-1 block text-sm ">
                 Cover Image (optional)
               </label>
               <input
@@ -151,7 +151,7 @@ export default function SignupPage() {
                 type="file"
                 accept="image/*"
                 onChange={(e) => setCoverFile(e.target.files ? e.target.files[0] : null)}
-                className="block w-full"
+                className="block w-full cursor-pointer"
               />
             </div>
             <div>
