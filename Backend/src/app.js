@@ -5,7 +5,8 @@ const app=express()
 
 
 app.use(cors({ //cors is used when we need to control that form what places our server can be accessed.
-    origin: process.env.CORS_ORIGIN,  //this corsorigin contains the url of the frontend from which our backend can accept request, in our case it will be from anywhere(*).
+    origin: process.env.CORS_ORIGIN ==="*"? true : (process.env.CORS_ORIGIN || 'http://localhost:3000')
+,  //this corsorigin contains the url of the frontend from which our backend can accept request, in our case it will be from anywhere(*).
     credentials: true
 }))
 

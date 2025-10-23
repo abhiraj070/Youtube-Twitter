@@ -35,7 +35,7 @@ export default function ProfilePage() {
     if (!tweetText.trim()) return
     try {
       const res= await axios.post(
-        "/api/v1/create-tweet",
+        "/api/v1/tweet/create-tweet",
         { content: tweetText.trim() }, // req.body.content is accesses in backend
         { withCredentials: true } //this allows the cookies to go with the response
       );
@@ -43,9 +43,10 @@ export default function ProfilePage() {
 
       setTweets([res.data.Tweets,...tweets])// here tweets array get updated. (...tweets) creats a new array and puts the new tweet in the front. the creation of the new array will trigger rerender
       setTweetText("")
-    } catch (error) {
-      console.log(error);
-      toast({title: "Error"});
+    } catch (error: any) {
+      console.error('postTweet error', error?.response?.data || error?.message || error)
+      const message = error?.response?.data?.message || error?.response?.data?.error || error?.message || 'An error occurred while posting the tweet'
+      toast({ title: 'Error', description: message, variant: 'destructive' })
     }
   }
 
