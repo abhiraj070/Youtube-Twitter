@@ -175,19 +175,21 @@ const loginUser = asyncHandler(async (req,res)=>{
     }
 
     const {refreshToken,accessToken}= await generateAccessAndRefreshTokens(user._id)
-   
-
+    
+    
     if(!refreshToken||!accessToken){
          throw new ApiError(500, "Something went wrong while generation refresh and access token ")
     }
-
+    
     const loggedInUser= await User.findById(user._id).select("-password -refreshToken")
 
     const options={// by doing this the cookie we are about to sent in the next step will be secured: cannot be edited from the frontend, can only be edited from the server.
         httpOnly: true,
-        secure: true
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
     }
-
+    console.log(accessToken," / ",refreshToken);
+    
     return res
     .status(200)
     .cookie("accessToken",accessToken,options)
