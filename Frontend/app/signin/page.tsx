@@ -1,7 +1,7 @@
-import SignUpForm from '@/components/auth/signup-form'
+import SignInForm from '@/components/auth/signin-form'
 import Link from 'next/link'
 
-export default function SignUpPage() {
+export default function SignInPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-background">
       <div className="w-full max-w-md">
@@ -10,10 +10,10 @@ export default function SignUpPage() {
             <div className="w-8 h-8 bg-accent rounded-full"></div>
             <span className="font-bold text-xl text-foreground">social</span>
           </Link>
-          <h1 className="text-3xl font-bold text-foreground">Create Account</h1>
-          <p className="text-foreground/60 mt-2">Join millions of creators</p>
+          <h1 className="text-3xl font-bold text-foreground">Sign In</h1>
+          <p className="text-foreground/60 mt-2">Welcome back to your community</p>
         </div>
-        <SignUpForm />
+        <SignInForm />
       </div>
     </div>
   )
