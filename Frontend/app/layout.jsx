@@ -8,7 +8,7 @@ const geist = Geist({ subsets: ["latin"] })
 const geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Youtube-Twitter",
+  title: "Social",
   description: "Created with v0",
   generator: "v0.app",
 }

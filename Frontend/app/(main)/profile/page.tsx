@@ -34,11 +34,13 @@ export default function ProfilePage() {
   async function postTweet() {
     if (!tweetText.trim()) return
     try {
+      console.log(9);
       const res= await axios.post(
         "/api/v1/tweet/create-tweet",
         { content: tweetText.trim() }, // req.body.content is accesses in backend
         { withCredentials: true } //this allows the cookies to go with the response
       );
+      console.log(10);
       toast({title: "Tweet Posted"}) //after the tweet is posted a pop will aper with the message in title.
 
       setTweets([res.data.Tweets,...tweets])// here tweets array get updated. (...tweets) creats a new array and puts the new tweet in the front. the creation of the new array will trigger rerender
