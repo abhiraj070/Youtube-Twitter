@@ -187,6 +187,7 @@ const loginUser = asyncHandler(async (req,res)=>{
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "none",
+        path: '/'
     }
     console.log(accessToken," / ",refreshToken);
     

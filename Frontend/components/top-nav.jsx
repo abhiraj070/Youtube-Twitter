@@ -75,10 +75,10 @@ export function TopNav() {
               </div>
               <DropdownMenuSeparator />
               <div className="p-2">
-                <DropdownMenuItem asChild className="cursor-pointer">
-                  <a href="/profile" className="w-full">
+                <DropdownMenuItem className="cursor-pointer">
+                  <Link href="/profile" className="w-full">
                     View Profile
-                  </a>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"

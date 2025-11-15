@@ -11,6 +11,7 @@ import { mockVideos, mockPlaylists, mockFollowing } from "@/lib/mock"
 import { cn } from "@/lib/utils"
 import { EditProfileDialog } from "@/components/edit-profile-dialog"
 import axios from 'axios'
+import { log } from "console"
 
 type TabKey = "videos" | "playlists" | "tweets" | "following"
 
@@ -32,6 +33,8 @@ export default function ProfilePage() {
   }
 
   async function postTweet() {
+    console.log(13);
+    
     if (!tweetText.trim()) return
     try {
       const res= await axios.post(
@@ -39,8 +42,8 @@ export default function ProfilePage() {
         { content: tweetText.trim() }, // req.body.content is accesses in backend
         { withCredentials: true } //this allows the cookies to go with the response
       );
+      console.log(19);
       toast({title: "Tweet Posted"}) //after the tweet is posted a pop will aper with the message in title.
-
       setTweets([res.data.Tweets,...tweets])// here tweets array get updated. (...tweets) creats a new array and puts the new tweet in the front. the creation of the new array will trigger rerender
       setTweetText("")
     } catch (error: any) {
