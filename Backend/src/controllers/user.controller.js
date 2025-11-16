@@ -185,12 +185,13 @@ const loginUser = asyncHandler(async (req,res)=>{
 
     const options={// by doing this the cookie we are about to sent in the next step will be secured: cannot be edited from the frontend, can only be edited from the server.
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
+        secure: false,
+        sameSite: "lax",
         path: '/'
     }
     console.log(accessToken," / ",refreshToken);
-    
+    console.log(typeof accessToken)
+    console.log(typeof refreshToken);
     return res
     .status(200)
     .cookie("accessToken",accessToken,options)

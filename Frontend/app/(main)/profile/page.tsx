@@ -11,7 +11,6 @@ import { mockVideos, mockPlaylists, mockFollowing } from "@/lib/mock"
 import { cn } from "@/lib/utils"
 import { EditProfileDialog } from "@/components/edit-profile-dialog"
 import axios from 'axios'
-import { log } from "console"
 
 type TabKey = "videos" | "playlists" | "tweets" | "following"
 
@@ -19,6 +18,7 @@ interface Tweet {
   id: string;
   text: string;
   user: string;
+  content: string;
 }
 
 export default function ProfilePage() {
@@ -41,10 +41,11 @@ export default function ProfilePage() {
         "/api/v1/tweet/create-tweet",
         { content: tweetText.trim() }, // req.body.content is accesses in backend
         { withCredentials: true } //this allows the cookies to go with the response
+        
       );
       console.log(19);
       toast({title: "Tweet Posted"}) //after the tweet is posted a pop will aper with the message in title.
-      setTweets([res.data.Tweets,...tweets])// here tweets array get updated. (...tweets) creats a new array and puts the new tweet in the front. the creation of the new array will trigger rerender
+      setTweets([res.data.data,...tweets])// here tweets array get updated. (...tweets) creats a new array and puts the new tweet in the front. the creation of the new array will trigger rerender
       setTweetText("")
     } catch (error: any) {
       console.error('postTweet error', error?.response?.data || error?.message || error)
@@ -53,10 +54,18 @@ export default function ProfilePage() {
     }
   }
 
-  function deleteTweet(id: string) {
-    setTweets((prev) => prev.filter((t) => t.id !== id))
-    toast({ title: "Tweet deleted" })
+  function deleteTweet(id?: string) {
+  if (!id) {
+    console.warn("deleteTweet called without id");
+    return;
   }
+  setTweets((prev) => {
+    const arr = Array.isArray(prev) ? prev : [];
+    return arr.filter((t) => Boolean(t) && t._id !== id);
+  });
+  toast({ title: "Tweet deleted" });
+}
+
 
   return (
     <div className="space-y-6">
@@ -170,16 +179,26 @@ export default function ProfilePage() {
                 <Button onClick={postTweet}>Post</Button>
               </div>
             </CardContent>
-          </Card>
+          </Card>          
           <div className="space-y-2">
-            {tweets.map((t) => (
-              <Card key={t.id}>
+            {tweets.map((t) => (              
+              <Card key={t?._id}>                
                 <CardContent className="flex items-start justify-between gap-3 p-4">
                   <div>
-                    <p className="text-sm">{t.content}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">{new Date(t.createdAt).toLocaleString()}</p>
+                    <p className="text-sm">
+                      {t.content ?? "--"}
+                    </p>
+
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {t?.createdAt ? new Date(t.createdAt).toLocaleString() : ""}
+                    </p>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={() => deleteTweet(t.id)}>
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => deleteTweet(t._id)}
+                  >
                     Delete
                   </Button>
                 </CardContent>

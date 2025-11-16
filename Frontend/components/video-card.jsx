@@ -10,13 +10,16 @@ function formatViews(n) {
 }
 
 function formatDate(iso) {
-  const d = new Date(iso)
-  return d.toLocaleDateString(undefined, {
+  if (!iso) return "Unknown date"
+  const date = new Date(iso)
+  if (isNaN(date)) return "Unknown date"
+  return date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
   })
 }
+
 
 export function VideoCard({ video }) {
   return (
@@ -47,7 +50,7 @@ export function VideoCard({ video }) {
         <div className="flex items-center gap-3">
           <span aria-label="views">{formatViews(video.views)} views</span>
           <span className="text-muted-foreground/80" aria-label="upload date">
-            {formatDate(video.uploadDate)}
+            {video?.uploadDate ? formatDate(video.uploadDate) : "Unknown date"}
           </span>
           <Heart className="h-4 w-4" aria-hidden />
         </div>
