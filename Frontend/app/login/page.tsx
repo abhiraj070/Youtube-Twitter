@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,6 +20,8 @@ export default function LoginPage() {
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [status, setStatus] = useState<string | null>(null)
+  
+
 
   function validate() {
     const errs: typeof errors = {}
@@ -53,6 +55,11 @@ export default function LoginPage() {
         {email: email,username: username,password: password},
         { withCredentials: true}
       )
+      console.log("DATA: ",res.data);
+      
+      localStorage.setItem("fullName", res.data.data.user.fullName);
+      localStorage.setItem("username",res.data.data.user.username)
+
       setStatus("Login successful — redirecting…")
       toast({ title: "Logged in", description: "Welcome back!" })
       await new Promise((r) => setTimeout(r, 300))
@@ -79,7 +86,6 @@ export default function LoginPage() {
       setIsSubmitting(false)
     }
   }
-
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
       <Card className="w-full max-w-sm animate-in fade-in-50">

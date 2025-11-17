@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -19,6 +19,15 @@ import {
 export function TopNav() {
   const [query, setQuery] = useState("")
   const { toast } = useToast()
+  const [profileusername, setUsername] = useState("")
+  const [profilename,setName]= useState("")
+
+  useEffect(()=>{
+    const savedname=localStorage.getItem("fullName")
+    const savedusername=localStorage.getItem("username")
+    setName(savedname || "YOU")
+    setUsername(savedusername || "@YOU")
+  },[])
 
   function onSearch(e) {
     e.preventDefault()
@@ -29,7 +38,7 @@ export function TopNav() {
     <header className="sticky top-0 z-30 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4">
         <Link href="/" className="font-semibold cursor-pointer">
-          <span className="rounded-md bg-primary px-2 py-1 text-primary-foreground">V</span>
+          <span className="rounded-md bg-primary px-2 py-1 text-primary-foreground">S</span>
           <span className="ml-2">Social</span>
         </Link>
 
@@ -70,8 +79,8 @@ export function TopNav() {
                 </div>
               </div>
               <div className="pt-8 px-4 pb-3 text-center">
-                <p className="text-sm font-medium leading-tight">Your Name</p>
-                <p className="text-xs text-muted-foreground">@you</p>
+                <p className="text-sm font-medium leading-tight">{profilename}</p>
+                <p className="text-xs text-muted-foreground">@{profileusername}</p>
               </div>
               <DropdownMenuSeparator />
               <div className="p-2">

@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -27,9 +27,27 @@ export default function ProfilePage() {
   const [tweetText, setTweetText] = useState("")
   const { toast } = useToast()
   const [openEdit, setOpenEdit] = useState(false)
+  const [profilename, setName]= useState("")
+  const [profileusername, setUsername]= useState("")
+  const [follow,setfollow]= useState("Follow")
+  const [bio,setbio]=useState("Short bio goes here. Tell the world who you are.")
+
+  useEffect(()=>{
+    const savedname= localStorage.getItem("fullName")
+    const savedusername= localStorage.getItem("username")
+    setUsername(savedusername || "@YOU")
+    setName(savedname || "hi")
+  },[])
 
   function followToggle() {
-    toast({ title: "Followed", description: "You are now following @you" })
+    if(follow=="Follow"){
+      setfollow("Unfollow")
+      toast({ title: "Unfollowed", description: `You unfollowed ${profilename}`  })
+    }
+    else{
+      setfollow("Follow")
+      toast({ title: "Followed", description: `You are now following ${profilename}` })
+    }
   }
 
   async function postTweet() {
@@ -66,6 +84,16 @@ export default function ProfilePage() {
   toast({ title: "Tweet deleted" });
 }
 
+function editProfile(){
+  const data= localStorage.getItem("profile")
+  const profile= JSON.parse(data ?? "")
+  const changedname=profile?.name
+  const changedusername= profile?.username
+  const newbio=profile?.bio
+  setName(changedname)
+  setUsername(changedusername)
+  setbio(newbio)
+}
 
   return (
     <div className="space-y-6">
@@ -87,22 +115,22 @@ export default function ProfilePage() {
               <AvatarImage src="/stylized-user-avatar.png" alt="User avatar" />
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
-            <h1 className="mt-3 text-xl font-semibold leading-tight md:text-2xl">Your Name</h1>
-            <p className="text-sm text-muted-foreground">@you</p>
+            <h1 className="mt-3 text-xl font-semibold leading-tight md:text-2xl">{profilename}</h1>
+            <p className="text-sm text-muted-foreground">@{profileusername}</p>
             <p className="mt-2 max-w-prose text-pretty text-sm text-muted-foreground">
-              Short bio goes here. Tell the world who you are.
+              {bio}
             </p>
             <div className="mt-3 flex items-center gap-4 text-sm text-muted-foreground">
               <span>
-                <strong className="text-foreground">1,234</strong> Followers
+                <strong className="text-foreground">1</strong> Followers
               </span>
               <span>
-                <strong className="text-foreground">312</strong> Following
+                <strong className="text-foreground">1</strong> Following
               </span>
             </div>
             <div className="mt-3 flex items-center gap-2">
-              <Button onClick={followToggle}>Follow</Button>
-              <Button variant="secondary" onClick={() => setOpenEdit(true)}>
+              <Button onClick={followToggle}>{follow}</Button>
+              <Button variant="secondary" onClick={() => (setOpenEdit(true), editProfile())}>
                 Edit Profile
               </Button>
             </div>
