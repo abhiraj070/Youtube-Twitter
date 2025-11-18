@@ -16,7 +16,7 @@ export const mockVideos = Array.from({ length: 9 }).map((_, i) => {
   const daysAgo = Math.floor(rand() * 60) + 1;
 
   const uploadDate = new Date(
-    Date.now() - daysAgo * 24 * 60 * 60 * 1000
+    Date.now() - daysAgo * 24 * 60 * 60 * 1000,
   ).toISOString();
 
   return {
@@ -30,23 +30,45 @@ export const mockVideos = Array.from({ length: 9 }).map((_, i) => {
   };
 });
 
-
 export const mockPlaylists = [
-  { id: "p1", title: "My Highlights", count: 12, thumbnail: "/playlist-highlights.jpg" },
-  { id: "p2", title: "Tech Talks", count: 8, thumbnail: "/playlist-tech-talks.jpg" },
-]
+  {
+    id: "p1",
+    title: "My Highlights",
+    count: 12,
+    thumbnail: "/playlist-highlights.jpg",
+  },
+  {
+    id: "p2",
+    title: "Tech Talks",
+    count: 8,
+    thumbnail: "/playlist-tech-talks.jpg",
+  },
+];
 
 export const mockTweets = [
-  { id: "t1", content: "First post on the platform!", createdAt: new Date().toISOString() },
-  { id: "t2", content: "Loving the new features.", createdAt: new Date().toISOString() },
-]
+  {
+    id: "t1",
+    content: "First post on the platform!",
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "t2",
+    content: "Loving the new features.",
+    createdAt: new Date().toISOString(),
+  },
+];
 
 export const mockFollowing = [
   { id: "u1", name: "Alex Smith", avatar: "/avatar-alex.png" },
   { id: "u2", name: "Jamie Lee", avatar: "/avatar-jamie.jpg" },
-]
+];
 
 export const mockSubscribers = [
-  { id: "s1", name: "Taylor", bio: "Video enthusiast", avatar: "/avatar-taylor.jpg" },
+  {
+    id: "s1",
+    name: "Taylor",
+    bio: "Video enthusiast",
+    avatar: "/avatar-taylor.jpg",
+  },
   { id: "s2", name: "Jordan", bio: "Loves tech", avatar: "/avatar-jordan.jpg" },
-]
+];

@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function SettingsPage() {
   return (
@@ -10,10 +10,12 @@ export default function SettingsPage() {
           <CardTitle>Appearance</CardTitle>
         </CardHeader>
         <CardContent className="flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">Toggle dark mode</span>
+          <span className="text-sm text-muted-foreground">
+            Toggle dark mode
+          </span>
           <ThemeToggle />
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

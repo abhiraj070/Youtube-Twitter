@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import { mockVideos } from "@/lib/mock"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Upload } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import Image from "next/image";
+import { mockVideos } from "@/lib/mock";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Upload } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function MyContentPage() {
-  const [videos, setVideos] = useState(mockVideos)
-  const { toast } = useToast()
+  const [videos, setVideos] = useState(mockVideos);
+  const { toast } = useToast();
 
   function deleteVideo(id: string) {
-    setVideos((prev) => prev.filter((v) => v.id !== id))
-    toast({ title: "Video deleted" })
+    setVideos((prev) => prev.filter((v) => v.id !== id));
+    toast({ title: "Video deleted" });
   }
 
   function uploadVideo() {
-    toast({ title: "Upload", description: "Mock upload started..." })
+    toast({ title: "Upload", description: "Mock upload started..." });
   }
 
   return (
@@ -47,7 +47,11 @@ export default function MyContentPage() {
               <CardTitle className="line-clamp-1 text-sm">{v.title}</CardTitle>
             </CardHeader>
             <CardContent className="flex justify-end pt-0">
-              <Button variant="destructive" size="sm" onClick={() => deleteVideo(v.id)}>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => deleteVideo(v.id)}
+              >
                 Delete
               </Button>
             </CardContent>
@@ -55,5 +59,5 @@ export default function MyContentPage() {
         ))}
       </div>
     </div>
-  )
+  );
 }

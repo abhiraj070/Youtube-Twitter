@@ -1,6 +1,6 @@
-import { TopNav } from "./top-nav"
-import { Sidebar } from "./sidebar"
-import { BottomNav } from "./bottom-nav"
+import { TopNav } from "./top-nav";
+import { Sidebar } from "./sidebar";
+import { BottomNav } from "./bottom-nav";
 
 export default function AppShell({ children }) {
   return (
@@ -14,5 +14,5 @@ export default function AppShell({ children }) {
       </div>
       <BottomNav />
     </div>
-  )
+  );
 }

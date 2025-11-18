@@ -1,6 +1,6 @@
-import Image from "next/image"
-import { Card, CardContent } from "@/components/ui/card"
-import { mockSubscribers } from "@/lib/mock"
+import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
+import { mockSubscribers } from "@/lib/mock";
 
 export default function SubscribersPage() {
   return (
@@ -26,5 +26,5 @@ export default function SubscribersPage() {
         ))}
       </div>
     </div>
-  )
+  );
 }

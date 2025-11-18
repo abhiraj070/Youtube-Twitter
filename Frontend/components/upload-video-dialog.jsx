@@ -1,36 +1,42 @@
-"use client"
+"use client";
 
-import { useRef, useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/hooks/use-toast"
-import { useVideos } from "@/lib/use-videos"
+import { useRef, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { useVideos } from "@/lib/use-videos";
 
 export function UploadVideoDialog({ open, onOpenChange }) {
-  const { addVideo } = useVideos()
-  const { toast } = useToast()
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [thumb, setThumb] = useState("")
-  const [progress, setProgress] = useState(0)
-  const fileRef = useRef(null)
+  const { addVideo } = useVideos();
+  const { toast } = useToast();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [thumb, setThumb] = useState("");
+  const [progress, setProgress] = useState(0);
+  const fileRef = useRef(null);
 
   function reset() {
-    setTitle("")
-    setDescription("")
-    setThumb("")
-    setProgress(0)
-    if (fileRef.current) fileRef.current.value = ""
+    setTitle("");
+    setDescription("");
+    setThumb("");
+    setProgress(0);
+    if (fileRef.current) fileRef.current.value = "";
   }
 
   function handleFile(file) {
-    if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => setThumb(String(reader.result))
-    reader.readAsDataURL(file)
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setThumb(String(reader.result));
+    reader.readAsDataURL(file);
   }
 
   async function onUpload() {
@@ -39,34 +45,37 @@ export function UploadVideoDialog({ open, onOpenChange }) {
         title: "Missing fields",
         description: "Please fill all fields and add a thumbnail.",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
-    setProgress(10)
-    await new Promise((r) => setTimeout(r, 300))
-    setProgress(55)
-    await new Promise((r) => setTimeout(r, 400))
-    setProgress(100)
+    setProgress(10);
+    await new Promise((r) => setTimeout(r, 300));
+    setProgress(55);
+    await new Promise((r) => setTimeout(r, 400));
+    setProgress(100);
 
     addVideo({
       title,
       description,
       thumbnail: thumb,
       duration: "00:30",
-    })
+    });
 
-    toast({ title: "Uploaded", description: "Your video was uploaded successfully." })
-    window.dispatchEvent(new CustomEvent("video:uploaded"))
-    onOpenChange(false)
-    reset()
+    toast({
+      title: "Uploaded",
+      description: "Your video was uploaded successfully.",
+    });
+    window.dispatchEvent(new CustomEvent("video:uploaded"));
+    onOpenChange(false);
+    reset();
   }
 
   return (
     <Dialog
       open={open}
       onOpenChange={(v) => {
-        onOpenChange(v)
-        if (!v) reset()
+        onOpenChange(v);
+        if (!v) reset();
       }}
     >
       <DialogContent className="sm:max-w-lg">
@@ -77,7 +86,12 @@ export function UploadVideoDialog({ open, onOpenChange }) {
         <div className="grid gap-4 py-2">
           <div className="grid gap-2">
             <Label htmlFor="title">Video Title</Label>
-            <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Enter a title" />
+            <Input
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Enter a title"
+            />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="desc">Description</Label>
@@ -90,7 +104,12 @@ export function UploadVideoDialog({ open, onOpenChange }) {
           </div>
           <div className="grid gap-2">
             <Label>Thumbnail Upload</Label>
-            <Input ref={fileRef} type="file" accept="image/*" onChange={(e) => handleFile(e.target.files?.[0])} />
+            <Input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFile(e.target.files?.[0])}
+            />
             {thumb ? (
               <img
                 src={thumb || "/placeholder.svg"}
@@ -105,7 +124,10 @@ export function UploadVideoDialog({ open, onOpenChange }) {
           </div>
           {progress > 0 && (
             <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
-              <div className="h-full bg-primary transition-all" style={{ width: `${progress}%` }} />
+              <div
+                className="h-full bg-primary transition-all"
+                style={{ width: `${progress}%` }}
+              />
             </div>
           )}
         </div>
@@ -114,8 +136,8 @@ export function UploadVideoDialog({ open, onOpenChange }) {
           <Button
             variant="ghost"
             onClick={() => {
-              onOpenChange(false)
-              reset()
+              onOpenChange(false);
+              reset();
             }}
           >
             Cancel
@@ -124,5 +146,5 @@ export function UploadVideoDialog({ open, onOpenChange }) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

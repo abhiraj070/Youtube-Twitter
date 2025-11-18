@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 type Props = {
-  text: string
-  onYes: () => void
-  onCancel: () => void
-}
+  text: string;
+  onYes: () => void;
+  onCancel: () => void;
+};
 
 export function ConfirmBar({ text, onYes, onCancel }: Props) {
   return (
@@ -21,5 +21,5 @@ export function ConfirmBar({ text, onYes, onCancel }: Props) {
         </Button>
       </div>
     </div>
-  )
+  );
 }

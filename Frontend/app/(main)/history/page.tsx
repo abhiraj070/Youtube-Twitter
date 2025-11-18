@@ -1,6 +1,6 @@
-import Image from "next/image"
-import { Card, CardContent } from "@/components/ui/card"
-import { mockVideos } from "@/lib/mock"
+import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
+import { mockVideos } from "@/lib/mock";
 
 export default function HistoryPage() {
   return (
@@ -21,13 +21,17 @@ export default function HistoryPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{v.title}</p>
-                <p className="truncate text-xs text-muted-foreground">{v.creator}</p>
-                <p className="text-xs text-muted-foreground">Watched {i + 1} day(s) ago</p>
+                <p className="truncate text-xs text-muted-foreground">
+                  {v.creator}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Watched {i + 1} day(s) ago
+                </p>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
     </div>
-  )
+  );
 }

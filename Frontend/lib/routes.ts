@@ -1,10 +1,10 @@
 /** Type for route paths */
-export type RoutePath = string
+export type RoutePath = string;
 
 /** Parameters for dynamic routes */
 export interface DynamicRouteParams {
-  id?: string
-  username?: string
+  id?: string;
+  username?: string;
 }
 
 // ============================================================================
@@ -14,7 +14,7 @@ export interface DynamicRouteParams {
 export const authRoutes = {
   login: "/login",
   signup: "/signup",
-} as const
+} as const;
 
 // ============================================================================
 // Home & Main Routes
@@ -23,7 +23,7 @@ export const authRoutes = {
 export const mainRoutes = {
   home: "/",
   dashboard: "/dashboard",
-} as const
+} as const;
 
 // ============================================================================
 // Profile Routes
@@ -33,7 +33,7 @@ export const profileRoutes = {
   profile: "/profile",
   settings: "/settings",
   subscribers: "/subscribers",
-} as const
+} as const;
 
 // ============================================================================
 // Video Routes
@@ -44,7 +44,7 @@ export const videoRoutes = {
   history: "/history",
   myContent: "/my-content",
   playlist: "/playlist",
-} as const
+} as const;
 
 // ============================================================================
 // Dynamic Route Helper Functions
@@ -57,11 +57,11 @@ export const videoRoutes = {
  */
 export const getPlaylistRoute = (id: string): RoutePath => {
   if (!id) {
-    console.warn("[routes] getPlaylistRoute called with empty id")
-    return videoRoutes.playlist
+    console.warn("[routes] getPlaylistRoute called with empty id");
+    return videoRoutes.playlist;
   }
-  return `${videoRoutes.playlist}/${id}`
-}
+  return `${videoRoutes.playlist}/${id}`;
+};
 
 /**
  * Generate a profile route with the given username
@@ -70,10 +70,10 @@ export const getPlaylistRoute = (id: string): RoutePath => {
  */
 export const getProfileRoute = (username?: string): RoutePath => {
   if (!username) {
-    return profileRoutes.profile
+    return profileRoutes.profile;
   }
-  return `${profileRoutes.profile}/${username}`
-}
+  return `${profileRoutes.profile}/${username}`;
+};
 
 /**
  * Generate a video route with the given video ID
@@ -82,11 +82,11 @@ export const getProfileRoute = (username?: string): RoutePath => {
  */
 export const getVideoRoute = (videoId: string): RoutePath => {
   if (!videoId) {
-    console.warn("[routes] getVideoRoute called with empty videoId")
-    return videoRoutes.myContent
+    console.warn("[routes] getVideoRoute called with empty videoId");
+    return videoRoutes.myContent;
   }
-  return `/video/${videoId}`
-}
+  return `/video/${videoId}`;
+};
 
 // ============================================================================
 // Grouped Routes Object
@@ -101,21 +101,21 @@ export const routes = {
   main: mainRoutes,
   profile: profileRoutes,
   video: videoRoutes,
-} as const
+} as const;
 
 // ============================================================================
 // Route Type Exports
 // ============================================================================
 
 /** Type for all available route keys */
-export type RouteKey = keyof typeof routes
+export type RouteKey = keyof typeof routes;
 
 /** Type for all available routes */
 export type AllRoutes =
   | (typeof authRoutes)[keyof typeof authRoutes]
   | (typeof mainRoutes)[keyof typeof mainRoutes]
   | (typeof profileRoutes)[keyof typeof profileRoutes]
-  | (typeof videoRoutes)[keyof typeof videoRoutes]
+  | (typeof videoRoutes)[keyof typeof videoRoutes];
 
 // ============================================================================
 // Utility Functions
@@ -127,8 +127,8 @@ export type AllRoutes =
  * @returns True if the path is an auth route
  */
 export const isAuthRoute = (path: string): boolean => {
-  return Object.values(authRoutes).includes(path as any)
-}
+  return Object.values(authRoutes).includes(path as any);
+};
 
 /**
  * Check if a path is a protected route (requires authentication)
@@ -136,8 +136,8 @@ export const isAuthRoute = (path: string): boolean => {
  * @returns True if the path is protected
  */
 export const isProtectedRoute = (path: string): boolean => {
-  return !isAuthRoute(path) && path !== mainRoutes.home
-}
+  return !isAuthRoute(path) && path !== mainRoutes.home;
+};
 
 /**
  * Get the breadcrumb label for a route
@@ -157,7 +157,7 @@ export const getRouteBreadcrumb = (path: string): string => {
     [videoRoutes.playlist]: "Playlists",
     [authRoutes.login]: "Login",
     [authRoutes.signup]: "Sign Up",
-  }
+  };
 
-  return breadcrumbMap[path] || "Page"
-}
+  return breadcrumbMap[path] || "Page";
+};

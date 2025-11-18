@@ -1,5 +1,5 @@
-import { VideoCard } from "@/components/video-card"
-import { mockVideos } from "@/lib/mock"
+import { VideoCard } from "@/components/video-card";
+import { mockVideos } from "@/lib/mock";
 
 export default function LikedPage() {
   return (
@@ -11,5 +11,5 @@ export default function LikedPage() {
         ))}
       </div>
     </div>
-  )
+  );
 }
